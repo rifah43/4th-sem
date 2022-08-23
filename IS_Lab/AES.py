@@ -1,43 +1,4 @@
-#key expansion
-Rconstant =["01", "02", "04", "08", "10", "20", "40", "80", "1b", "36"]
 
-def rotWord(temp):
-    storee = temp[0]
-    i=1
-    while (i<4):
-        temp[i-1] = temp[i]
-        if i==3:
-            temp[i] = storee
-
-def subWord(temp):
-    i=0
-    while (i<4):
-        temp[i]=sbox[temp[i]]
-
-def keyExpansion(inKey):
-    i=0
-    exKey = ""
-    while (i<16):
-        exKey[i] = inKey[i]
-    while (i<176):
-        temp = ""
-        j=0
-        while (j<4):
-            temp[j]=exKey[i-4+j]
-
-        if((i%16)==0):
-            rotWord(temp)
-            subWord(temp)
-            temp[0] ^= Rconstant[(i/16)-1]
-
-        k=0
-        while (k<4):
-            exKey[i+k]=temp[k]^exKey[i-16+k]
-        i+=4
-
-
-
-#padding
 inMessage = input("Enter the message: ")
 exMessage = inMessage + (16-(len(inMessage)%16)) * "~"
 
@@ -66,5 +27,68 @@ inv_s_box = [
 
 ]
 
+mixCol = [
+    "02", "03", "01", "01",
+    "01", "02", "03", "01",
+    "01", "01", "02", "03",
+    "03", "01", "01", "02"
+    ]
 
-print()
+Rconstant =["01", "02", "04", "08", "10", "20", "40", "80", "1b", "36"]
+
+def rotWord(temp):
+    storee = temp[0]
+    i=1
+    while (i<4):
+        temp[i-1] = temp[i]
+        if i==3:
+            temp[i] = storee
+        i+=1
+
+def subWord(temp):
+    i=0
+    while (i<4):
+        temp[i]=sbox[temp[i]]
+        i+=1
+
+exKey = ""
+def keyExpansion(inKey):
+    i=0
+    while (i<16):
+        exKey[i] = inKey[i]
+        i+=1
+    while (i<176):
+        temp = ""
+        j=0
+        while (j<4):
+            temp[j]=exKey[i-4+j]
+            j+=1
+
+        if((i%16)==0):
+            rotWord(temp)
+            subWord(temp)
+            temp[0] ^= Rconstant[(i/16)-1]
+
+        k=0
+        while (k<4):
+            exKey[i+k]=temp[k]^exKey[i-16+k]
+            k+=1
+        i+=4
+
+def addRoundKey(state,round):
+    i=0
+    while (i<16):
+         state[i] ^= exKey[round*16+i]
+         i+=1
+
+
+def encryption(exMessage):
+    addRoundKey(exMessage,0)
+    i=0
+    while(i<10):
+        subBytes(exMessage)
+        shift_rows(exMessage)
+        if(i!=9):
+            mixColumn(exMessage)
+        addRoundKey(exMessage,i)
+        i+=1
