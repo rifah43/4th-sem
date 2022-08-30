@@ -1,7 +1,4 @@
-inMessage = input("Enter the message: ")
-exMessage = inMessage + (16 - (len(inMessage) % 16)) * "~"
-
-# hardcoded tables
+#hardcoded tables
 
 s_box = (
     0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
@@ -38,8 +35,27 @@ inv_s_box = (
     0x1F, 0xDD, 0xA8, 0x33, 0x88, 0x07, 0xC7, 0x31, 0xB1, 0x12, 0x10, 0x59, 0x27, 0x80, 0xEC, 0x5F,
     0x60, 0x51, 0x7F, 0xA9, 0x19, 0xB5, 0x4A, 0x0D, 0x2D, 0xE5, 0x7A, 0x9F, 0x93, 0xC9, 0x9C, 0xEF,
     0xA0, 0xE0, 0x3B, 0x4D, 0xAE, 0x2A, 0xF5, 0xB0, 0xC8, 0xEB, 0xBB, 0x3C, 0x83, 0x53, 0x99, 0x61,
-    0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D
+    0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D,
 )
+
+dictionary = {
+    0: 0x00, 1: 0x01, 2: 0x02, 3: 0x03, 4: 0x04, 5: 0x05, 6: 0x06, 7: 0x07, 8: 0x08, 9: 0x09, 10: 0x0a, 11: 0x0b, 12: 0x0c, 13: 0x0d, 14: 0x0e, 15: 0x0f,
+    16: 0x10, 17: 0x11, 18: 0x12, 19: 0x13, 20: 0x14, 21: 0x15, 22: 0x16, 23: 0x17, 24: 0x18, 25: 0x19, 26: 0x1a, 27: 0x1b, 28: 0x1c, 29: 0x1d, 30: 0x1e, 31: 0x1f,
+    32: 0x20, 33: 0x21, 34: 0x22, 35: 0x23, 36: 0x24, 37: 0x25, 38: 0x26, 39: 0x27, 40: 0x28, 41: 0x29, 42: 0x2a, 43: 0x2b, 44: 0x2c, 45: 0x2d, 46: 0x2e, 47: 0x2f,
+    48: 0x30, 49: 0x31, 50: 0x32, 51: 0x33, 52: 0x34, 53: 0x35, 54: 0x36, 55: 0x37, 56: 0x38, 57: 0x39, 58: 0x3a, 59: 0x3b, 60: 0x3c, 61: 0x3d, 62: 0x3e, 63: 0x3f,
+    64: 0x40, 65: 0x41, 66: 0x42, 67: 0x43, 68: 0x44, 69: 0x45, 70: 0x46, 71: 0x47, 72: 0x48, 73: 0x49, 74: 0x4a, 75: 0x4b, 76: 0x4c, 77: 0x4d, 78: 0x4e, 79: 0x4f,
+    80: 0x50, 81: 0x51, 82: 0x52, 83: 0x53, 84: 0x54, 85: 0x55, 86: 0x56, 87: 0x57, 88: 0x58, 89: 0x59, 90: 0x5a, 91: 0x5b, 92: 0x5c, 93: 0x5d, 94: 0x5e, 95: 0x5f,
+    96: 0x60, 97: 0x61, 98: 0x62, 99: 0x63, 100: 0x64, 101: 0x65, 102: 0x66, 103: 0x67, 104: 0x68, 105: 0x69, 106: 0x6a, 107: 0x6b, 108: 0x6c, 109: 0x6d, 110: 0x6e, 111: 0x6f,
+    112: 0x70, 113: 0x71, 114: 0x72, 115: 0x73, 116: 0x74, 117: 0x75, 118: 0x76, 119: 0x77, 120: 0x78, 121: 0x79, 122: 0x7a, 123: 0x7b, 124: 0x7c, 125: 0x7d, 126: 0x7e, 127: 0x7f,
+    128: 0x80, 129: 0x81, 130: 0x82, 131: 0x83, 132: 0x84, 133: 0x85, 134: 0x86, 135: 0x87, 136: 0x88, 137: 0x89, 138: 0x8a, 139: 0x8b, 140: 0x8c, 141: 0x8d, 142: 0x8e, 143: 0x8f,
+    144: 0x90, 145: 0x91, 146: 0x92, 147: 0x93, 148: 0x94, 149: 0x95, 150: 0x96, 151: 0x97, 152: 0x98, 153: 0x99, 154: 0x9a, 155: 0x9b, 156: 0x9c, 157: 0x9d, 158: 0x9e, 159: 0x9f,
+    160: 0xa0, 161: 0xa1, 162: 0xa2, 163: 0xa3, 164: 0xa4, 165: 0xa5, 166: 0xa6, 167: 0xa7, 168: 0xa8, 169: 0xa9, 170: 0xaa, 171: 0xab, 172: 0xac, 173: 0xad, 174: 0xae, 175: 0xaf,
+    176: 0xb0, 177: 0xb1, 178: 0xb2, 179: 0xb3, 180: 0xb4, 181: 0xb5, 182: 0xb6, 183: 0xb7, 184: 0xb8, 185: 0xb9, 186: 0xba, 187: 0xbb, 188: 0xbc, 189: 0xbd, 190: 0xbe, 191: 0xbf,
+    192: 0xc0, 193: 0xc1, 194: 0xc2, 195: 0xc3, 196: 0xc4, 197: 0xc5, 198: 0xc6, 199: 0xc7, 200: 0xc8, 201: 0xc9, 202: 0xca, 203: 0xcb, 204: 0xcc, 205: 0xcd, 206: 0xce, 207: 0xcf,
+    208: 0xd0, 209: 0xd1, 210: 0xd2, 211: 0xd3, 212: 0xd4, 213: 0xd5, 214: 0xd6, 215: 0xd7, 216: 0xd8, 217: 0xd9, 218: 0xda, 219: 0xdb, 220: 0xdc, 221: 0xdd, 222: 0xde, 223: 0xdf,
+    224: 0xe0, 225: 0xe1, 226: 0xe2, 227: 0xe3, 228: 0xe4, 229: 0xe5, 230: 0xe6, 231: 0xe7, 232: 0xe8, 233: 0xe9, 234: 0xea, 235: 0xeb, 236: 0xec, 237: 0xed, 238: 0xee, 239: 0xef,
+    240: 0xf0, 241: 0xf1, 242: 0xf2, 243: 0xf3, 244: 0xf4, 245: 0xf5, 246: 0xf6, 247: 0xf7, 248: 0xf8, 249: 0xf9, 250: 0xfa, 251: 0xfb, 252: 0xfc, 253: 0xfd, 254: 0xfe, 255: 0xff
+}
 
 Table2 = (
     0x00, 0x02, 0x04, 0x06, 0x08, 0x0a, 0x0c, 0x0e, 0x10, 0x12, 0x14, 0x16, 0x18, 0x1a, 0x1c, 0x1e,
@@ -160,58 +176,113 @@ Rconstant = (0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36)
 
 def rotWord(temp):
     storee = temp[0]
-    for i in range(4):
-        temp[i - 1] = temp[i]
-        if i == 3:
+    i=1
+    while (i<4):
+        temp[i-1] = temp[i]
+        if i==3:
             temp[i] = storee
-
+        i+=1
 
 def subWord(temp):
-    for i in range(4):
-        temp[i] = sbox[temp[i]]
-        i += 1
+    i=0
+    while (i<4):
+        temp[i]=s_box[temp[i]]
+        i+=1
 
-
-extendedKey = ""
-
-
+exKey = []
 def keyExpansion(inKey):
-    i = 0
-    for i in range(4):
-        extendedKey[i] = inKey[i]
-        i += 1
-    for i in range(16, 176, 4):
-        temp = ""
-        for j in range(4):
-            temp[j] = extendedKey[i - 4 + j]
-            j += 1
+    i=0
+    while (i<16):
+        exKey[i] = inKey[i]
+        i+=1
+    while (i<176):
+        temp = []
+        j=0
+        while (j<4):
+            temp[j]=exKey[i-4+j]
+            j+=1
 
-        if (i % 16) == 0:
+        if((i%16)==0):
             rotWord(temp)
             subWord(temp)
-            temp[0] ^= Rconstant[(i / 16) - 1]
+            temp[0] ^= Rconstant[(i/16)-1]
 
-        for k in range(4):
-            extendedKey[i + k] = temp[k] ^ extendedKey[i - 16 + k]
+        k=0
+        while (k<4):
+            exKey[i+k]=temp[k]^exKey[i-16+k]
+            k+=1
+        i+=4
 
+def subBytes(exMessage):
+    while i<16:
+        exMessage[i]=s_box[exMessage[i]]
+        i+=1
 
-def sub_bytes(exMessage):
+def shiftRows(exMessage):
+    temp = [[exMessage[0],exMessage[4],exMessage[8],exMessage[12]],
+    [exMessage[13],exMessage[1],exMessage[5],exMessage[9]],
+    [exMessage[10],exMessage[14],exMessage[2],exMessage[6]],
+    [exMessage[7],exMessage[11],exMessage[15],exMessage[3]]]
+
+    k = 0
+    for i in (0,4):
+        for j in (0,4):
+            exMessage[k] = temp[j][i]
+            k+=1
+
+def mixColumn(exMessage):
+    temp = []
+    for i in 16:
+        if(i%4==0):
+            temp[i]=Table2[exMessage[i]]^Table3[exMessage[i+1]]^exMessage[i+2]^exMessage[i+3]
+        if(i%4==1):
+            temp[i]=Table2[exMessage[i]]^Table3[exMessage[i+1]]^exMessage[i+2]^exMessage[i-1]
+        if(i%4==2):
+            temp[i]=Table2[exMessage[i]]^Table3[exMessage[i+1]]^exMessage[i-1]^exMessage[i-2]
+        if(i%4==3):
+            temp[i]=Table2[exMessage[i]]^Table3[exMessage[i-3]]^exMessage[i-1]^exMessage[i-2]
+    
+    for i in 16:
+        exMessage[i] = temp[i]
+
+def addRoundKey(exMessage,round):
+    i=0
+    while (i<16):
+         exMessage[i] ^= exKey[round*16+i]
+         i+=1
+
+def printEncrypt(exMessage):
     for i in range(16):
-        exMessage[i] = s_box[exMessage[i]]
-
-def addRoundKey(exMessage, round):
-    for i in range(4):
-        state[i] ^= extendedKey[round * 16 + i]
-        i += 1
-
+        print(hex(exMessage[i])[2:], end=' ')
 
 def encryption(exMessage):
-    addRoundKey(exMessage, 0)
-    i = 0
-    while i < 10:
+    addRoundKey(exMessage,0)
+    i=1
+    while(i<11):
         subBytes(exMessage)
-        shift_rows(exMessage)
-        if i != 9:
+        shiftRows(exMessage)
+        if(i!=9):
             mixColumn(exMessage)
-        addRoundKey(exMessage, i)
-        i += 1
+        addRoundKey(exMessage,i)
+        printEncrypt
+        i+=1
+
+
+def main():
+    inMessage = input("Enter the message: ")
+    exMessageText = inMessage + (16-(len(inMessage)%16)) * "~"
+    key = 'Thats my Kung Fu'
+    exMessage = []
+    inKey = []
+    for i in range(len(exMessageText)):
+        exMessage.append(dictionary.get(ord(exMessageText[i])))
+    for i in range(len(key)):
+        key.append(dictionary.get(ord(inKey[i])))
+    
+    keyExpansion(inKey)
+    
+    encryption(exMessage)
+
+
+if __name__ == '__main__':
+    main()
