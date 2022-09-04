@@ -309,7 +309,7 @@ def encryption(exMessage):
 
 
 def main():
-    inMessage = 'Two One Nine Two'
+    inMessage = input("Enter the message: \n")
     exMessageText = inMessage + (len(inMessage) % 16) * "~"
     key = 'Thats my Kung Fu'
     exMessage = []
