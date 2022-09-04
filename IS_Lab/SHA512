@@ -19,21 +19,15 @@ dictionary = {
 
 inMessage = input("Enter the message: \n")
 inLen = len(inMessage)
-inLen = inLen * 8
-mod = inLen % 1024
-
-add = 1
-
-if (1024 - mod) >= 128:
-    add = add * (1024 - mod)
-
-elif (1024 - mod) < 128:
-    add = add* (2048 - mod)
-
-inMessage += "1"
+if inLen != 896:
+    inMessage += "1"
+    for i in range (0, (inLen*8)-inLen-1):
+        inMessage += "0"
+mod = (inLen*8) % 1024
+mod = 896 - mod
 
 y=0
-while y < (add-129) :
+while y < mod :
     inMessage += "0"
     y += 1
 
