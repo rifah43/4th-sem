@@ -1,0 +1,80 @@
+
+
+3 of 65
+(no subject)
+Inbox
+
+Rifah Tashfiha Faria <bsse1213@iit.du.ac.bd>
+Attachments
+Aug 31, 2022, 12:31 PM (6 days ago)
+to me
+
+
+2 Attachments
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <pthread.h>
+
+int msize=10000, num_threads=10000,counter=0;
+double mat1[10000][10000];
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+
+void input(int size)
+{
+  int i, j;
+
+  for (i = 0; i < size; ++i) {
+    for (j = 0; j < size; ++j) {
+      mat1[ i ][ j ]=1 ;
+    }
+}
+}
+
+/**
+ * Thread routine.
+ * Each thread works on a portion of the 'matrix1'.
+ * The start and end of the portion depend on the 'arg' which
+ * is the ID assigned to threads sequentially. 
+ */
+void * worker(void *arg )
+{
+int tid,i,j;
+tid = *(int *)(arg);
+i=tid;
+	for (j = 0; j < msize; ++j) {
+    if(mat1[i][j]==1)
+       {
+       counter++;
+       }}
+}
+
+
+
+int main( int argc, char *argv[] )
+{
+  int i;
+  double sum = 0;
+  struct timeval tstart, tend;
+  double exectime;
+  
+  input(msize);
+  pthread_t  threads[10000];
+
+  for ( i = 0; i < num_threads; ++i ) {
+    int *tid,j,k;
+    tid = (int *) malloc( sizeof(int) );
+    *tid = i;
+    
+    pthread_create( &threads[i], NULL, worker, (void *)tid);
+
+  }
+
+  for ( i = 0; i < num_threads; ++i ) {
+    pthread_join( threads[i], NULL );
+  }
+  printf("Number of 1 is %d\n",counter);
+
+
+  return 0;
+}
