@@ -60,6 +60,15 @@ F = bin(int(F, 16)).zfill(8)
 G = bin(int(G, 16)).zfill(8)
 H = bin(int(H, 16)).zfill(8)
 
+a = A
+b = B
+c = C
+d = D
+e = E
+f = F
+g = G
+h = H
+
 
 def rotR(n, x):
     return n >> 14 | n << (64 - x)
@@ -86,7 +95,7 @@ def maj(a, b, c):
 
 
 
-def F():
+def F(i):
     b = a
     c = b
     d = c
@@ -100,30 +109,11 @@ def F():
 
 
 def SHA512(inMessage):
-    a = A
-    b = B
-    c = C
-    d = D
-    e = E
-    f = F
-    g = G
-    h = H
 
     for i in range(80):
-        T1 = h + ch(e, f, g) + sumE(e) + w[i] + K[i]
-        T2 = sumA(a) + maj(a, b, c)
-        h=g
-        g=f
-        f=e
-        e=(d + T1)
-        d=c
-        c=b
-        b=a
-        a=(T1+T2)
+        F(i)
     
     
-
-
 
 def main():
     inMessage = input("Enter the message: \n")
