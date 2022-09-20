@@ -1,3 +1,7 @@
+import binascii
+import struct
+
+
 IV = (0x6A09E667F3BCC908, 0xBB67AE8584CAA73B, 0x3C6EF372FE94F82B, 0xA54FF53A5F1D36F1, 0x510E527FADE682D1,
       0x9B05688C2B3E6C1F, 0x1F83D9ABFB41BD6B, 0x5BE0CD19137E2179)
 
@@ -42,36 +46,15 @@ K = {0x428a2f98d728ae22, 0x7137449123ef65cd,
     0x4cc5d4becb3e42b6, 0x597f299cfc657e2a,
     0x5fcb6fab3ad6faec, 0x6c44198c4a475817}
 
-A = "6A09E667F3BCC908"
-B = "BB67AE8584CAA73B"
-C = "3C6EF372FE94F82B"
-D = "A54FF53A5F1D36F1"
-E = "510E527FADE682D1"
-F = "9B05688C2B3E6C1F"
-G = "1F83D9ABFB41BD6B"
-H = "5BE0CD19137E2179"
+A ,B, C, D, E, F, G, H = IV
 
-A = bin(int(A, 16)).zfill(8)
-B = bin(int(B, 16)).zfill(8)
-C = bin(int(C, 16)).zfill(8)
-D = bin(int(D, 16)).zfill(8)
-E = bin(int(E, 16)).zfill(8)
-F = bin(int(F, 16)).zfill(8)
-G = bin(int(G, 16)).zfill(8)
-H = bin(int(H, 16)).zfill(8)
-
-a = A
-b = B
-c = C
-d = D
-e = E
-f = F
-g = G
-h = H
-
+W = [0]*80
 
 def rotR(n, x):
-    return n >> 14 | n << (64 - x)
+    return n >> x | n << (64 - x)
+
+def shiftR(n, x):
+    return n >> x
 
 
 def sumA(a):
@@ -93,30 +76,58 @@ def ch(e, f, g):
 def maj(a, b, c):
     return (a & b)^(b & c)^(a & c)
 
+def sigma0(x):
+    rot1 = rotR(x, 1)
+    rot8 = rotR(x, 8)
+    sh7 = shiftR(x, 7)
+    return rot1 ^ rot8 ^ sh7
 
-
-def F(i):
-    b = a
-    c = b
-    d = c
-    f = e
-    g = f
-    h = g
-    T1 = h + ch(e, f, g) + sumE(e) + W[i] + K[i]
-    T2 = sumA(a) + maj(a, b, c)
-    a = T1 + T2
-    e = d + T1
-
+def sigma1(x):
+    rot19 = rotR(x, 19)
+    rot61 = rotR(x, 61)
+    sh6 = shiftR(x, 6)
+    return rot19 ^ rot61 ^ sh6
 
 def SHA512(inMessage):
 
+    sha512_hash = list(IV)
+    a = A
+    b = B
+    c = C
+    d = D
+    e = E
+    f = F
+    g = G
+    h = H
+    for chunk_start in range(0, len(inMessage), 128):
+        chunk = inMessage[chunk_start:chunk_start + 128]
+
+        w = [0] * 80
+        w[0:16] = struct.unpack('!16Q', chunk)
+
+        for i in range(16, 80):
+            w[i] = (w[i - 16] + sumA(a) + w[i - 7] + sumE(e))
+
+        a, b, c, d, e, f, g, h = sha512_hash
+
     for i in range(80):
-        F(i)
+        T1 = h + ch(e, f, g) + sumE(e) + W[i] + K[i]
+        T2 = sumA(a) + maj(a, b, c)
+        h=g
+        g=f
+        f=e
+        e=(d + T1)
+        d=c
+        c=b
+        b=a
+        a=(T1+T2)
     
-    
+    print(binascii.hexlify(b''.join(struct.pack('!Q', element) for element in sha512_hash),).decode('utf-8'))
+
+
 
 def main():
-    inMessage = input("Enter the message: \n")
+    inMessage = "This is SHA-512"
     inMessage = ''.join(format(ord(i), '08b') for i in inMessage)
     inLen = len(inMessage)
     mod = inLen % 1024
@@ -129,6 +140,7 @@ def main():
     sizeBin = ''.join(format(len(inMessage), '0128b'))
     inMessage = inMessage + sizeBin
     inMessage = bytes(inMessage, 'utf-8')
+
     SHA512(inMessage)
 
 
