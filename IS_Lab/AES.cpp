@@ -214,15 +214,15 @@ void mixCol(unsigned char* exMessage)
        {
         temp[i]=Table_for_2[exMessage[i]]^Table_for_3[exMessage[i+1]]^exMessage[i+2]^exMessage[i+3];
        }
-       if(i%4==1)
+       else if(i%4==1)
        {
         temp[i]=Table_for_2[exMessage[i]]^Table_for_3[exMessage[i+1]]^exMessage[i+2]^exMessage[i-1];
        }
-       if(i%4==2)
+       else if(i%4==2)
        {
         temp[i]=Table_for_2[exMessage[i]]^Table_for_3[exMessage[i+1]]^exMessage[i-1]^exMessage[i-2];
        }
-       if(i%4==3)
+       else if(i%4==3)
        {
         temp[i]=Table_for_2[exMessage[i]]^Table_for_3[exMessage[i-3]]^exMessage[i-1]^exMessage[i-2]; 
        } 
@@ -376,7 +376,6 @@ int main()
         padding = sizeof(inMessage);
     }
 
-    cout<<padding<<endl;
     unsigned char exMessage[padding+1]={}, final[padding];
 
 	for(int i=0;i<sizeof(inMessage);i++)
@@ -391,7 +390,7 @@ int main()
     exMessage[48] = '\0';
     expandKey(key);
 
-    for(int i=0;i<sizeof(exMessage);i+=16)
+    for(int i=0;i<sizeof(exMessage)-1;i+=16)
     {
         unsigned char temp[16];
 
@@ -403,9 +402,10 @@ int main()
 		encrypt(temp);
 
 		for(int j=0;j<16;j++)
-        final[i+j]=temp[j];		
+        {
+            final[i+j]=temp[j];		
+        }
 	}
-
     cout<<"Encrypted Message: ";
     for (int i = 0; i < sizeof(final); i++)
     {
@@ -416,16 +416,15 @@ int main()
         }
     }
     cout<< endl;
+    unsigned char final2[sizeof(final)];
 
-    unsigned char final2[sizeof(exMessage)+1];
-
-    for (int i = 0; i < sizeof(inMessage); i += 16)
+    for (int i = 0; i < sizeof(final); i += 16)
     {
         unsigned char temp[16];
 
         for(int j=0;j<16;j++)
         {
-            temp[j]=exMessage[i+j];
+            temp[j]=final[i+j];
         }
 
 		decrypt(temp);
@@ -433,11 +432,6 @@ int main()
 		for(int j=0;j<16;j++)
         {
             final2[i+j]=temp[j];
-        }
-
-        if(i+16==sizeof(exMessage))
-        {
-            final2[i+16]='\0';
         }
     }
    
