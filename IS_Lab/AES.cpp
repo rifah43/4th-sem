@@ -1,8 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-unsigned char exKey[176];
-
+char exKey[176];
 unsigned char sbox[256] ={
 	0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
 	0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0,
@@ -160,14 +159,13 @@ unsigned char Table_for_14[256] ={
 void rotateW(unsigned char* temp)
 {
     unsigned char storee = temp[0];
-    int i = 1;
-    while (i <= 4)
+    int i = 0;
+    while (i < 4)
     {
         temp[i - 1] = temp[i];
         if (i == 3)
         {
             temp[i] = storee;
-            break;
         }
         i++;
     }
@@ -378,20 +376,19 @@ int main()
         padding = sizeof(inMessage);
     }
 
-    unsigned char exMessage[padding+1], final[padding+1];
+    cout<<padding<<endl;
+    unsigned char exMessage[padding+1]={}, final[padding];
 
 	for(int i=0;i<sizeof(inMessage);i++)
     {
         exMessage[i] = inMessage[i];
     }
 
-    for(int i=sizeof(inMessage);i<padding;i++)
+    for(int i=sizeof(inMessage)-1;i<padding;i++)
     {
         exMessage[i] = '~';
     }
-
-    exMessage[padding] = '\0';
-
+    exMessage[48] = '\0';
     expandKey(key);
 
     for(int i=0;i<sizeof(exMessage);i+=16)
