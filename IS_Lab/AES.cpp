@@ -299,7 +299,7 @@ void invShiftR(unsigned char* exMessage)
 {
     unsigned char temp[4][4] = {{exMessage[0], exMessage[13], exMessage[10], exMessage[7]},
             {exMessage[4], exMessage[1], exMessage[14], exMessage[11]},
-            {exMessage[8], exMessage[9], exMessage[2], exMessage[15]},
+            {exMessage[8], exMessage[5], exMessage[2], exMessage[15]},
             {exMessage[12], exMessage[9], exMessage[6], exMessage[3]}};
 
     int k = 0;
