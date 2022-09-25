@@ -297,11 +297,12 @@ void addRkeyD(unsigned char* decMessage,int roundNo)
 
 void invShiftR(unsigned char* exMessage)
 {
-    unsigned char temp[4][4] = {{exMessage[0], exMessage[13], exMessage[10], exMessage[7]},
-            {exMessage[4], exMessage[1], exMessage[14], exMessage[11]},
-            {exMessage[8], exMessage[5], exMessage[2], exMessage[15]},
-            {exMessage[12], exMessage[9], exMessage[6], exMessage[3]}};
+    unsigned char temp[4][4] = {{exMessage[0], exMessage[4], exMessage[8], exMessage[12]},
+            {exMessage[13], exMessage[1], exMessage[5], exMessage[9]},
+            {exMessage[10], exMessage[14], exMessage[2], exMessage[6]},
+            {exMessage[7], exMessage[11], exMessage[15], exMessage[3]}};
 
+   
     int k = 0;
     for(int i=0;i<4;i++)
     {
@@ -311,6 +312,7 @@ void invShiftR(unsigned char* exMessage)
             k++;
         }
     }     
+
 }
 
 void invSubBytes(unsigned char* decMessage)
@@ -363,7 +365,7 @@ void decrypt(unsigned char* decMessage)
 
 int main()
 {
-    unsigned char inMessage[]="This is AES encryption decryption";
+    unsigned char inMessage[]=" is AES encryption dThisecryption";
     unsigned char key[]="Thats my Kung Fu";
 
     int padding;
@@ -436,7 +438,7 @@ int main()
     }
    
      cout<<"Decrypted Message: " ;
-     for (int i = 0; i < sizeof(inMessage); i++)
+     for (int i = 0; i < sizeof(inMessage)-1; i++)
     {
         printf("%c",final2[i]);
     } 
